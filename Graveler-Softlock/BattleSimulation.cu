@@ -16,12 +16,12 @@ __global__ void SimulateBattle(int* turns, int* possibilities, int* iterations, 
 		return;
 
 	//Initialize Move Count
-	int paralysisCount = 0;
-
 	int moveCounts[4] = { 0, 0, 0, 0 };
 
+	//Initialize Shared Memory for Paralysis Counts in a Block
 	__shared__ int counts[1024];
 
+	//Create a Shared Random Number Generator between all threads
 	__shared__ curandState sharedRNG;
 	if (threadIdx.x == 0)
 		curand_init(seed, index, 0, &sharedRNG);
@@ -30,8 +30,10 @@ __global__ void SimulateBattle(int* turns, int* possibilities, int* iterations, 
 	//Loop through the number of turns
 	for (int i = 0; i < numOfTurns; i = i + 16)
 	{
+		//Generate a Random Number
 		unsigned int paralysisOdd = curand(&sharedRNG);
 
+		//Extract 2 Bits from the Random Number
 		unsigned char random1 = (paralysisOdd >> 0) & 0x03;   // First 2 bits (0-3)
 		unsigned char random2 = (paralysisOdd >> 2) & 0x03;   // Next 2 bits (0-3)
 		unsigned char random3 = (paralysisOdd >> 4) & 0x03;   // Next 2 bits (0-3)
@@ -49,6 +51,7 @@ __global__ void SimulateBattle(int* turns, int* possibilities, int* iterations, 
 		unsigned char random15 = (paralysisOdd >> 28) & 0x03; // Next 2 bits (0-3)
 		unsigned char random16 = (paralysisOdd >> 30) & 0x03; // Last 2 bits (0-3)
 
+		//Add to the right Array Index for the Move used
 		moveCounts[random1]++;
 		moveCounts[random2]++;
 		moveCounts[random3]++;
@@ -67,8 +70,10 @@ __global__ void SimulateBattle(int* turns, int* possibilities, int* iterations, 
 		moveCounts[random16]++;
 	}
 
+	//Add the Paralysis Count to the Shared Memory
 	counts[threadIdx.x] = moveCounts[0];
 
+	//Find the Maximum Paralysis Count in the Thread Group
 	int threadMax = 0;
 	if (threadIdx.x == 0)
 	{
@@ -82,14 +87,14 @@ __global__ void SimulateBattle(int* turns, int* possibilities, int* iterations, 
 		threadMax = max;
 	}
 
+	//Synchronize the Threads
 	__syncthreads();
 
+	//Check and replace the Global Paralysis Count if it's the highest so far
 	if (threadIdx.x == 0)
 	{
 		atomicMax(paralysisCounts, threadMax);
 	}
-
-	//atomicMax(paralysisCounts, moveCounts[0]);
 }
 
 int SimulateBattles(int iterations, int turns, int possibilities, unsigned long long rngSeed)
@@ -101,9 +106,6 @@ int SimulateBattles(int iterations, int turns, int possibilities, unsigned long 
 	int* gpuInterations = 0;
 	unsigned long long* gpuRNGSeed = 0;
 	curandState gpuRNG;
-
-	//curandState state;
-	//curand_init(rngSeed, 0 , 0, &state);
 
 	//Initialize CUDA Status
 	cudaError_t cudaStatus;
@@ -120,12 +122,8 @@ int SimulateBattles(int iterations, int turns, int possibilities, unsigned long 
 	cudaStatus = AssignMemory((void**)&gpuMoveRolls, sizeof(int));
 
 	//Calculate the number of blocks and threads
-
-	dim3 threads(1024, 1, 1);
-	//dim3 blocks((iterations + threads.x - 1) / threads.x, (iterations + threads.y - 1) / threads.y, 1);
-
-//	int threads = 1024;
-	int blocks = (iterations + threads.x - 1) / threads.x;
+    int threads = 1024;
+	int blocks = (iterations + threads - 1) / threads;
 
 	//Run the Simulation on the GPU
 	SimulateBattle << <blocks, threads >> > (gpuTurns, gpuPossibilities, gpuInterations, gpuMoveRolls, gpuRNGSeed);
