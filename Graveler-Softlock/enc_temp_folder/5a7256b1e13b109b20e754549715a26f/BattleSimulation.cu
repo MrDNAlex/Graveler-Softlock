@@ -21,6 +21,11 @@ __global__ void SimulateBattle(int* turns, int* possibilities, int* iterations, 
 	int moveCounts[4] = { 0, 0, 0, 0 };
 
 	__shared__ int counts[1024];
+	/*if (threadIdx.x == 0)
+	{
+		for (int i = 0; i < 1024; i++)
+			counts[i] = 0;
+	}*/
 
 	__shared__ curandState sharedRNG;
 	if (threadIdx.x == 0)
