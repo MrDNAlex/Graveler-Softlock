@@ -3,18 +3,16 @@
 #include <chrono>
 
 
-int GetMaxParalysis(int iterations, int numOfTurns, int numOfPossibleMoves)
+void GetMaxParalysis(int iterations, int numOfTurns, int numOfPossibleMoves)
 {
+	//Start the Clock!
 	auto before = std::chrono::high_resolution_clock::now();
 
+	//Simulate Battles on GPU
 	int* moveRolls = SimulateBattles(iterations, numOfTurns, numOfPossibleMoves);
 
-	auto after = std::chrono::high_resolution_clock::now();
-
-	auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(after - before);
-
+	//Find the Max Number of Rolls
 	int paralysisCount = 0;
-
 	for (int i = 0; i < iterations; i++)
 	{
 		if (moveRolls[i] > paralysisCount)
@@ -24,33 +22,31 @@ int GetMaxParalysis(int iterations, int numOfTurns, int numOfPossibleMoves)
 	//Free Memory
 	delete[] moveRolls;
 
-	printf("Time taken: %f seconds\n", duration.count());
-
-	return paralysisCount;
-}
-
-int GetMaxParalysisOptimized(int iterations, int numOfTurns)
-{
-	auto before = std::chrono::high_resolution_clock::now();
-
-	int paralysisCount = SimulateBattlesOptimized(iterations, numOfTurns);
-
+	//Stop the Clock!
 	auto after = std::chrono::high_resolution_clock::now();
 
+	//Calculate the time taken
 	auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(after - before);
 
-	//int paralysisCount = 0;
+	//Display the time taken and Max Number of Rolls
+	printf("Max Paralysis Count in %f seconds: %d times\n", duration.count(), paralysisCount);
+}
 
-	//for (int i = 0; i < iterations; i++)
-	//{
-	//	if (moveRolls[i] > paralysisCount)
-	//		paralysisCount = moveRolls[i];
-	//}
+int GetMaxParalysisOptimized(int iterations)
+{
+	//Start the Clock!
+	auto before = std::chrono::high_resolution_clock::now();
 
-	////Free Memory
-	//delete[] moveRolls;
+	//Simulate Battles on GPU
+	int paralysisCount = SimulateBattlesOptimized(iterations);
 
-	printf("Time taken: %f seconds\n", duration.count());
+	//Stop the Clock!
+	auto after = std::chrono::high_resolution_clock::now();
+
+	//Calculate the time taken
+	auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(after - before);
+
+	printf("Max Paralysis Count in %f seconds: %d times\n", duration.count(), paralysisCount);
 
 	return paralysisCount;
 }
@@ -58,12 +54,13 @@ int GetMaxParalysisOptimized(int iterations, int numOfTurns)
 
 int main()
 {
-	int iterations = 10000000;
+	int iterations = 1000000000;
 	int numOfPossibleMoves = 4;
 	int numOfTurns = 231;
 
-	printf("Max Paralysis Count Reached %d times\n", GetMaxParalysis(iterations, numOfTurns, numOfPossibleMoves));
-	printf("Max Paralysis Count Reached %d times\n", GetMaxParalysisOptimized(iterations, numOfTurns));
+	//GetMaxParalysis(iterations, numOfTurns, numOfPossibleMoves);
+	GetMaxParalysisOptimized(iterations);
+
 
 	return 0;
 }

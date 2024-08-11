@@ -3,6 +3,20 @@
 #include <curand_kernel.h>
 #include <MemoryManagement.h>
 
-__global__ void SimulateBattleOptimized(int* turns, int* paralysisCounts);
+__device__ int seed = 123423784;
+__device__ int turns = 231;
+__device__ int iterations = 1000000000;
 
-int SimulateBattlesOptimized(int iterations, int turns);
+/// <summary>
+/// Simulates a Single Battle on the GPU
+/// </summary>
+/// <param name="paralysisCounts"> The Maximum number of Paralyses Counted</param>
+/// <returns></returns>
+__global__ void SimulateBattleOptimized( int* paralysisCounts);
+
+/// <summary>
+/// Simulates all the Battles on the GPU
+/// </summary>
+/// <param name="iterations"> The Number of Battles to Simulate</param>
+/// <returns> Returns the Max Paralysis Count</returns>
+int SimulateBattlesOptimized(int iterations);
