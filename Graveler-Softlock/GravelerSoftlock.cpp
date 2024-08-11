@@ -86,5 +86,7 @@ int main()
 
 	GetMaxParalysis(iterations, numOfTurns, numOfPossibleMoves, RNGSeed);
 
+	std::cout << "Press Enter to Exit" << std::endl;
+
 	return 0;
 }
