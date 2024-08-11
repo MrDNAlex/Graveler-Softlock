@@ -25,9 +25,9 @@ __global__ void SimulateBattleOptimized(int* paralysisCounts)
 		//Check if the move causes paralysis
 		if (paralysisOdd == 0)
 			paralysisCount++;
-
 	}
 
+	//Assign the Maximum Paralysis Count if it's greater than the current value
 	atomicMax(paralysisCounts, paralysisCount);
 }
 

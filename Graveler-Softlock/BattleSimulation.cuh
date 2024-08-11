@@ -9,9 +9,9 @@
 /// <param name="turns"> The Number of Turns in the battle </param>
 /// <param name="possibilities"> The Number of Possibilities to Occur in a Turn </param>
 /// <param name="iterations"> The Number of iterations in the simulation </param>
-/// <param name="moveRolls"> The Array of Number of Paralysis Counts </param>
+/// <param name="paralysisCounts"> The Array of Number of Paralysis Counts </param>
 /// <returns></returns>
-__global__ void SimulateBattle(int* turns, int* possibilities, int* iterations, int* moveRolls);
+__global__ void SimulateBattle(int* turns, int* possibilities, int* iterations, int* paralysisCounts, unsigned long long* rngSeed);
 
 
 /// <summary>
@@ -20,5 +20,6 @@ __global__ void SimulateBattle(int* turns, int* possibilities, int* iterations, 
 /// <param name="iterations"> The Number of Battles to Simulate</param>
 /// <param name="turns"> The number of Turns that occur in the Battle </param>
 /// <param name="possibilities"> The Number of possibilities for each turn (Basically the inverse of the probability)</param>
+/// <param name="rngSeed"> The Seed for the Random Number Generator </param>
 /// <returns> Returns the Paralysis Counts </returns>
-int* SimulateBattles(int iterations, int turns, int possibilities);
+int SimulateBattles(int iterations, int turns, int possibilities, unsigned long long rngSeed);
