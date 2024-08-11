@@ -1,5 +1,5 @@
 # Graveler Softlock
- A experimental C++ and CUDA program with the goal of running the Graveler Softlock probability as fast as possible
+ A experimental C++ and CUDA program with the goal of running the Graveler Softlock program as fast as possible in the ShoddyCast The Science! YouTube Video ![You'll NEVER Escape ‪@Pikasprey‬'s Evil Soft Lock | The SCIENCE of Soft Lock Picking Pokemon](https://www.youtube.com/watch?v=M8C8dHQE2Ro&t=649s)
 
 # Simulation Speed
 ![Speed](https://github.com/user-attachments/assets/0d5fa987-dea0-4094-8145-11f7b1e6f3a8)
