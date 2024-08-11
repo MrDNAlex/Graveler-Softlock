@@ -83,11 +83,9 @@
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="BattleSimulation.cu" />
-    <CudaCompile Include="BattleSimulationOptimized.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BattleSimulation.cuh" />
-    <ClInclude Include="BattleSimulationOptimized.cuh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
