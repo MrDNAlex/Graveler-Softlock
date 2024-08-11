@@ -65,8 +65,7 @@ int main()
 		std::cout << "GPU not Detected, Program will not function without one" << std::endl;
 		return 1;
 	}
-
-	//int iterations = 1000000000;
+	
 	int iterations = 0;
 	int numOfPossibleMoves = 0;
 	int numOfTurns = 0;
@@ -86,7 +85,10 @@ int main()
 
 	GetMaxParalysis(iterations, numOfTurns, numOfPossibleMoves, RNGSeed);
 
-	std::cout << "Press Enter to Exit" << std::endl;
+	int endCode = 0;
 
-	return 0;
+	std::cout << "Enter 0 to Exit" << std::endl;
+	std::cin >> endCode;
+
+	return endCode;
 }
