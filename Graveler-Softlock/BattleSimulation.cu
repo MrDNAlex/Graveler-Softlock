@@ -79,6 +79,7 @@ int SimulateBattles(int iterations, int turns, int possibilities, unsigned long 
 	cudaFree(gpuPossibilities);
 	cudaFree(gpuMoveRolls);
 	cudaFree(gpuInterations);
+	cudaFree(gpuRNGSeed);
 
 	return moveRolls[0];
 }
