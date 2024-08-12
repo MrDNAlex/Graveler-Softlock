@@ -1,6 +1,8 @@
 # Graveler Softlock
- A experimental C++ and CUDA program with the goal of running the Graveler Softlock program as fast as possible in the ShoddyCast The Science! YouTube Video ![You'll NEVER Escape ‪@Pikasprey‬'s Evil Soft Lock | The SCIENCE of Soft Lock Picking Pokemon](https://www.youtube.com/watch?v=M8C8dHQE2Ro&t=649s)
+ A experimental C++ and CUDA program with the goal of running the Graveler Softlock program as fast as possible in the ShoddyCast The Science! YouTube Video ![You'll NEVER Escape ‪@Pikasprey‬'s Evil Soft Lock | The SCIENCE of Soft Lock Picking Pokemon](https://www.youtube.com/watch?v=M8C8dHQE2Ro&t=649s).
+ 
  In the Video, Austin makes a Python program running 1 Billion battle iterations taking 8 days to run. He then challenges the community to get better times.
+ 
  This is my attempt at solving the problem
 
  # Results
