@@ -118,7 +118,6 @@ int SimulateBattles(int iterations, int turns, int possibilities, unsigned long 
 	cudaStatus = AssignVariable((void**)&gpuPossibilities, &possibilities, sizeof(int));
 	cudaStatus = AssignVariable((void**)&gpuInterations, &iterations, sizeof(int));
 	cudaStatus = AssignVariable((void**)&gpuRNGSeed, &rngSeed, sizeof(unsigned long long));
-	//cudaStatus = AssignVariable((void**)&gpuRNG, &state, sizeof(curandState));
 	cudaStatus = AssignMemory((void**)&gpuMoveRolls, sizeof(int));
 
 	//Calculate the number of blocks and threads
