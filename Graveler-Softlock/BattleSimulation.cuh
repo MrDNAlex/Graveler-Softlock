@@ -13,7 +13,7 @@
 /// <returns></returns>
 //__global__ void SimulateBattle(int* turns, int* possibilities, int* iterations, int* paralysisCounts, unsigned long long* rngSeed);
 
-__global__ void SimulateBattle(unsigned long long* simulationCount, bool* kill, int* maxParalysisCounts, unsigned long long* rngSeed);
+__global__ void SimulateBattle(unsigned long long* simulationCount, int* maxParalysisCounts, unsigned long long* rngSeed);
 
 
 /// <summary>

@@ -148,3 +148,29 @@
 //
 //	return moveRolls[0];
 //}
+
+
+////Save for Display Error
+//cudaError_t error = cudaGetLastError();
+//if (error != cudaSuccess) {
+//	fprintf(stderr, "CUDA error: %s\n", cudaGetErrorString(error));
+//}
+
+
+//	//Timing Variables
+//float totalTime = 0;
+//cudaEvent_t start, stop;
+//cudaEventCreate(&start);
+//cudaEventCreate(&stop);
+//cudaEventRecord(start, 0);
+//
+////Run the Simulation on the GPU
+//
+//SimulateBattle << <blocks, threads >> > (gpuSimulationCount, gpuParalysisCount, gpuRNGSeed);
+//
+////Timing Variables
+//cudaEventRecord(stop, 0);
+//cudaEventSynchronize(stop);
+//cudaEventElapsedTime(&totalTime, start, stop);
+//
+//std::cout << totalTime << "ms" << std::endl;
