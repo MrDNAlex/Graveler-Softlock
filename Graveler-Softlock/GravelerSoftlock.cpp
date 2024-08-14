@@ -14,7 +14,7 @@ void GetMaxParalysis(int iterations, int numOfTurns, int numOfPossibleMoves, uns
 	auto before = std::chrono::high_resolution_clock::now();
 
 	//Simulate Battles on GPU
-	int moveRolls = SimulateBattles(iterations, numOfTurns, numOfPossibleMoves, rngSeed);
+	int moveRolls = SimulateBattles(rngSeed);
 
 	//Stop the Clock!
 	auto after = std::chrono::high_resolution_clock::now();
@@ -71,14 +71,14 @@ int main()
 	int numOfTurns = 0;
 	unsigned long long RNGSeed = 0;
 
-	std::cout << "Enter the Number of Iterations: ";
-	std::cin >> iterations; 
+	//std::cout << "Enter the Number of Iterations: ";
+	//std::cin >> iterations; 
 
-	std::cout << "Enter the Number of Possible Moves: ";
-	std::cin >> numOfPossibleMoves;
+	//std::cout << "Enter the Number of Possible Moves: ";
+	//std::cin >> numOfPossibleMoves;
 
-	std::cout << "Enter the Number of Turns in the Battle: ";
-	std::cin >> numOfTurns;
+	//std::cout << "Enter the Number of Turns in the Battle: ";
+	//std::cin >> numOfTurns;
 
 	std::cout << "Enter the RNG Seed: ";
 	std::cin >> RNGSeed;

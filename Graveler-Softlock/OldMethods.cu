@@ -1,50 +1,7 @@
-#include "BattleSimulation.cuh"
-
-#define ROUNDS 1000000000
-#define TURNS 231
-
-__global__ void SimulateBattle(unsigned long long* simulationCount, bool* kill, int* maxParalysisCounts, unsigned long long* rngSeed)
-{
-	//Calculate GPU Core Index
-	int index = blockIdx.x * blockDim.x + threadIdx.x;
-
-	//Skip if the Index is above the number of simulations
-	if (index >= ROUNDS)
-		return;
-
-	//Initialize the RNG Generator
-	curandState RNG;
-	curand_init(*rngSeed, index, 0, &RNG);
-
-	//Enter a While Loop to simulate Battles, it doesn't stop until all running cores finish all 1 Billion Simulations
-	while (*simulationCount < ROUNDS - (index * 2) && !*kill)
-	{
-		int paralysisCount = 0;
-		int turnCount = 0;
-
-		while (turnCount <= TURNS)
-		{
-			unsigned int roll = curand(&RNG);
-
-			for (int i = 0; i < 16; i++)
-			{
-				int shift = i * 2;
-				unsigned int currentRoll = (roll >> shift) & 0x03;
-				if (currentRoll == 0)
-					paralysisCount++;
-
-				turnCount++;
-			}
-		}
-
-
-		if (*kill) return;
-		// atomicMax writes the number of ones rolled this session to d_maxOnes if it is greater, atomicAdd increments d_rolls by one each session
-		atomicMax(maxParalysisCounts, paralysisCount);
-		atomicAdd(simulationCount, 1);
-	}
-}
-
+#include <cuda_runtime.h>
+#include <device_launch_parameters.h>
+#include <MemoryManagement.h>
+#include <curand_kernel.h>
 
 //__global__ void SimulateBattle(int* turns, int* possibilities, int* iterations, int* paralysisCounts, unsigned long long* rngSeed)
 //{
@@ -142,7 +99,7 @@ __global__ void SimulateBattle(unsigned long long* simulationCount, bool* kill, 
 //		atomicMax(paralysisCounts, threadMax);
 //	}
 //}
-
+//
 //int SimulateBattles(int iterations, int turns, int possibilities, unsigned long long rngSeed)
 //{
 //	//Initialize GPU Variables
@@ -191,74 +148,3 @@ __global__ void SimulateBattle(unsigned long long* simulationCount, bool* kill, 
 //
 //	return moveRolls[0];
 //}
-
-int SimulateBattles(unsigned long long rngSeed)
-{
-	unsigned long long zeroLong = 0;
-	int zero = 0;
-	bool f = false;
-
-	//Initialize GPU Variables
-	//int* gpuTurns = 0;
-	int* gpuParalysisCount = 0;
-	//int* gpuSimulations = 0;
-	bool* gpuKill = false;
-	unsigned long long* gpuSimulationCount = 0;
-	unsigned long long* gpuRNGSeed = 0;
-
-	//Initialize CUDA Status
-	cudaError_t cudaStatus;
-
-	//Get the GPU Device
-	cudaStatus = cudaSetDevice(0);
-
-	//Assign Variables and Memory Space to the GPU
-	cudaStatus = AssignVariable((void**)&gpuSimulationCount, &zeroLong, sizeof(unsigned long long));
-	cudaStatus = AssignVariable((void**)&gpuKill, &f, sizeof(bool));
-	cudaStatus = AssignVariable((void**)&gpuRNGSeed, &rngSeed, sizeof(unsigned long long));
-	cudaStatus = AssignVariable((void**)&gpuParalysisCount, &zero, sizeof(int));
-
-	//Calculate the number of blocks and threads
-	int threads = 1024;
-	int blocks = 46;
-	
-	float totalTime = 0;
-	cudaEvent_t start, stop;
-	cudaEventCreate(&start);
-	cudaEventCreate(&stop);
-	cudaEventRecord(start, 0);
-
-	//Run the Simulation on the GPU
-	SimulateBattle << <blocks, threads >> > (gpuSimulationCount, gpuKill, gpuParalysisCount, gpuRNGSeed);
-
-	cudaEventRecord(stop, 0);
-	cudaEventSynchronize(stop);
-	cudaEventElapsedTime(&totalTime, start, stop);
-
-	std::cout << totalTime << "ms" << std::endl;
-
-	//Synchronize the GPU (Wait for calculations to finish)
-	cudaStatus = cudaDeviceSynchronize();
-
-	//Save for Display Error
-	cudaError_t error = cudaGetLastError();
-	if (error != cudaSuccess) {
-		fprintf(stderr, "CUDA error: %s\n", cudaGetErrorString(error));
-	}
-
-	//Initialize the Move Rolls Array
-	int* paralysisCount = new int[1];
-
-	//Retreive the Move Rolls from the GPU
-	cudaStatus = GetVariable(paralysisCount, gpuParalysisCount, sizeof(int));
-
-	//Free Up the GPU Memory
-	//cudaFree(gpuTurns);
-	cudaFree(gpuParalysisCount);
-	cudaFree(gpuRNGSeed);
-	//cudaFree(gpuSimulations);
-	cudaFree(gpuKill);
-	cudaFree(gpuSimulationCount);
-
-	return paralysisCount[0];
-}

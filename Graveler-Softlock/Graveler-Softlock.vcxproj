@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="BattleSimulation.cu" />
+    <CudaCompile Include="OldMethods.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BattleSimulation.cuh" />
