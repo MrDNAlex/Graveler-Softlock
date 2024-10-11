@@ -13,6 +13,13 @@ This time we hardcoded Values, we also limit the Number of cores that end up run
 ## Results
 (60 * 60 * 24 * 8)/2.25 = 691 200 / 2.25 = 307 200 --> 307 200x Speedup
 
+# Code Snippets
+
+![image](https://github.com/user-attachments/assets/0e07300a-8b60-4d2c-9230-64e3e8cf450e)
+
+![image](https://github.com/user-attachments/assets/be5dca62-c78c-433b-a25f-b63d3c286f7d)
+
+
 # Simulation Speed (V2)
 ![Speed](https://github.com/user-attachments/assets/591e87a1-a4ec-4076-bd74-55532d8bfecb)
 
